@@ -10,6 +10,7 @@ export interface Settings {
   accentColor: string;
   developer?: string;
   developerLink?: string;
+  email?: string;
 }
 
 let cached: Settings | null = null;
@@ -33,6 +34,7 @@ export function getSettings(): Settings {
     accentColor: map["accent-color"] || "#3b82f6",
     developer: map.developer || undefined,
     developerLink: map["developer-link"] || undefined,
+    email: map.email || undefined,
   };
 
   return cached;

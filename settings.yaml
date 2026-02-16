@@ -1,5 +1,8 @@
 # Required
-appID: "<APP ID>"
+appID: "APP ID HERE"
+
+# Optional if you change contact.md and privacy.md
+email: hello@example.com
 
 # Optional Overrides
 # title: CoolApp

@@ -29,28 +29,16 @@ pnpm run preview
 
 All configuration lives in `settings.yaml`. Only `appID` is required. Everything else is optional and falls back to App Store data.
 
-```yaml
-# Required
-appID: "1234567890"
-
-# Optional overrides
-title: My App
-headline: A better way to do things
-subheadline: A longer description shown below the headline.
-accent-color: "#3b82f6"
-developer: Your Name
-developer-link: https://example.com
-```
-
-| Key              | Required | Default                | Description                          |
-| ---------------- | -------- | ---------------------- | ------------------------------------ |
-| `appID`          | Yes      | —                      | Your app's App Store ID              |
-| `title`          | No       | App Store `trackName`  | Page title and meta tags             |
-| `headline`       | No       | App Store `trackName`  | Large heading in the hero section    |
-| `subheadline`    | No       | Hidden                 | Paragraph below the headline         |
-| `accent-color`   | No       | Blue                   | Accent color (hex), used for buttons |
-| `developer`      | No       | App Store `sellerName` | Name shown in the footer             |
-| `developer-link` | No       | No Link                | Link when clicking developer name    |
+| Key              | Required   | Default                | Description                                                              |
+| ---------------- | ---------- | ---------------------- | ------------------------------------------------------------------------ |
+| `appID`          | Yes        | —                      | Your app's App Store ID                                                  |
+| `email`          | No / Maybe | hello@example.com      | Email shown on contact and privacy pages. Not needed if both are edited. |
+| `title`          | No         | App Store `trackName`  | Page title and meta tags                                                 |
+| `headline`       | No         | App Store `trackName`  | Large heading in the hero section                                        |
+| `subheadline`    | No         | Hidden                 | Paragraph below the headline                                             |
+| `accent-color`   | No         | Blue                   | Accent color (hex), used for buttons                                     |
+| `developer`      | No         | App Store `sellerName` | Name shown in the footer                                                 |
+| `developer-link` | No         | No Link                | Link when clicking developer name                                        |
 
 Lines starting with `#` are comments.
 
@@ -69,7 +57,7 @@ Local files always take priority. If neither a local screenshot nor App Store sc
 
 Drop any `.md` file into `src/content/pages/` and it becomes a page automatically. A link to it appears in the footer.
 
-_Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app.
+_Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app. Section for RevenueCat and TelemetryDeck exist, but are commented out.
 
 Frontmatter fields `title` and `description` are both optional. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
 
