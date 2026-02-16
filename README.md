@@ -39,14 +39,14 @@ accent-color = #3b82f6
 developer = Your Name
 ```
 
-| Key | Required | Default | Description |
-|---|---|---|---|
-| `appID` | Yes | — | Your app's App Store ID |
-| `title` | No | App Store `trackName` | Page title and meta tags |
-| `headline` | No | App Store `trackName` | Large heading in the hero section |
-| `subheadline` | No | Hidden | Paragraph below the headline |
-| `accent-color` | No | Blue | Accent color (hex), used for buttons |
-| `developer` | No | App Store `sellerName` | Name shown in the footer |
+| Key            | Required | Default                | Description                          |
+| -------------- | -------- | ---------------------- | ------------------------------------ |
+| `appID`        | Yes      | —                      | Your app's App Store ID              |
+| `title`        | No       | App Store `trackName`  | Page title and meta tags             |
+| `headline`     | No       | App Store `trackName`  | Large heading in the hero section    |
+| `subheadline`  | No       | Hidden                 | Paragraph below the headline         |
+| `accent-color` | No       | Blue                   | Accent color (hex), used for buttons |
+| `developer`    | No       | App Store `sellerName` | Name shown in the footer             |
 
 Lines starting with `#` are comments.
 
@@ -54,10 +54,10 @@ Lines starting with `#` are comments.
 
 Place files in the `public/` directory to override images fetched from the App Store:
 
-| File | Overrides |
-|---|---|
-| `public/appicon.png` | App icon (hero + favicon + OG image) |
-| `public/screenshot.png` | App screenshot in the hero section |
+| File                    | Overrides                            |
+| ----------------------- | ------------------------------------ |
+| `public/appicon.png`    | App icon (hero + favicon + OG image) |
+| `public/screenshot.png` | App screenshot in the hero section   |
 
 Local files always take priority. If neither a local screenshot nor App Store screenshots are available, the hero section displays as a single centered column without an image.
 
@@ -78,7 +78,13 @@ Your content here.
 
 Frontmatter fields `title` and `description` are both optional. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
 
-*Contact* and *Privacy Policy* pages are already created and can be adjusted to your app.
+_Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app.
+
+## Getting your App ID
+
+To find your app ID from [App Store Marketing Tools](https://tools.applemediaservices.com/app-store), type the name of your app in the Search field, and select the appropriate country or region and media type. In the results, select your app. In the detail view for your app, find the Content Link. Your app ID is the number between id and ?.
+
+Alternatively, select your app in App Store Connect. Under General, select App Information, then find your app ID in the General Information section that opens in the middle of the screen; your app ID is listed as Apple ID.
 
 ## Development
 
