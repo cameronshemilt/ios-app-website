@@ -1,6 +1,6 @@
 # iOS App Website Template
 
-A minimal static website template for iOS apps. Provide an App Store ID and the site builds itself — app name, icon, screenshots, and developer name are all fetched from Apple's iTunes API at build time.
+A minimal static website template for iOS apps. Provide an App Store ID and the site builds itself: app name, icon, screenshots, and developer name are all fetched from Apple's iTunes API at build time.
 
 Built with [Astro](https://astro.build). Ships zero JavaScript. Output is pure HTML + CSS.
 
@@ -39,16 +39,18 @@ headline = A better way to do things
 subheadline = A longer description shown below the headline.
 accent-color = #3b82f6
 developer = Your Name
+developer-link = https://example.com
 ```
 
-| Key            | Required | Default                | Description                          |
-| -------------- | -------- | ---------------------- | ------------------------------------ |
-| `appID`        | Yes      | —                      | Your app's App Store ID              |
-| `title`        | No       | App Store `trackName`  | Page title and meta tags             |
-| `headline`     | No       | App Store `trackName`  | Large heading in the hero section    |
-| `subheadline`  | No       | Hidden                 | Paragraph below the headline         |
-| `accent-color` | No       | Blue                   | Accent color (hex), used for buttons |
-| `developer`    | No       | App Store `sellerName` | Name shown in the footer             |
+| Key              | Required | Default                | Description                          |
+| ---------------- | -------- | ---------------------- | ------------------------------------ |
+| `appID`          | Yes      | —                      | Your app's App Store ID              |
+| `title`          | No       | App Store `trackName`  | Page title and meta tags             |
+| `headline`       | No       | App Store `trackName`  | Large heading in the hero section    |
+| `subheadline`    | No       | Hidden                 | Paragraph below the headline         |
+| `accent-color`   | No       | Blue                   | Accent color (hex), used for buttons |
+| `developer`      | No       | App Store `sellerName` | Name shown in the footer             |
+| `developer-link` | No       | No Link                | Link when clicking developer name    |
 
 Lines starting with `#` are comments.
 
@@ -83,7 +85,7 @@ Since this template uses Astro, a static site will be generated in the `/dist` d
 
 ### Coolify
 
-Enable the checkmark for _Is this a static site_ and set `/dist` as the _Publish Directory_. Then double check that the port has been changed to `80` (This should have happened automatically).
+Enable the checkmark for _'Is this a static site'_ and set `/dist` as the _Publish Directory_. Then double check that the port has been changed to `80` (This should have happened automatically).
 
 ## Examples
 
