@@ -9,6 +9,7 @@ import { resolve } from "node:path";
 const settings = getSettings();
 const appData = await getAppStoreData(settings.appID);
 
+const appName = settings.title || appData.trackName
 const headline = settings.headline || appData.trackName;
 const subheadline = settings.subheadline || "";
 const trackViewUrl = appData.trackViewUrl;
@@ -44,7 +45,7 @@ const screenshotUrl = hasLocalScreenshot
     </div>
     {screenshotUrl && (
       <div class="md:w-1/2 flex justify-center">
-        <Screenshot src={screenshotUrl} alt={`${headline} screenshot`} />
+        <Screenshot src={screenshotUrl} alt={`Screenshot of ${appName}`} />
       </div>
     )}
   </div>

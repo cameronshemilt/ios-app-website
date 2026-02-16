@@ -16,6 +16,8 @@ Edit `settings.txt` with your app's ID:
 appID = 1234567890
 ```
 
+<!-- Adjust `contact.md` and `privacy.md` in `src/content/pages/` to fit your app. -->
+
 Build and preview:
 
 ```sh
@@ -25,7 +27,7 @@ pnpm run preview
 
 ## Configuration
 
-All configuration lives in `settings.txt`. Only `appID` is required — everything else is optional and falls back to App Store data.
+All configuration lives in `settings.txt`. Only `appID` is required. Everything else is optional and falls back to App Store data.
 
 ```
 # Required
@@ -65,20 +67,9 @@ Local files always take priority. If neither a local screenshot nor App Store sc
 
 Drop any `.md` file into `src/content/pages/` and it becomes a page automatically. A link to it appears in the footer.
 
-```md
----
-title: Privacy Policy
-description: Privacy policy for the app.
----
-
-# Privacy Policy
-
-Your content here.
-```
+_Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app.
 
 Frontmatter fields `title` and `description` are both optional. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
-
-_Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app.
 
 ## Getting your App ID
 
@@ -86,12 +77,16 @@ To find your app ID from [App Store Marketing Tools](https://tools.applemediaser
 
 Alternatively, select your app in App Store Connect. Under General, select App Information, then find your app ID in the General Information section that opens in the middle of the screen; your app ID is listed as Apple ID.
 
-## Development
+## Deployment
 
-```sh
-pnpm run dev      # Start dev server
-pnpm run build    # Build to dist/
-pnpm run preview  # Preview production build
-```
+Since this template uses Astro, a static site will be generated in the `/dist` directory.
 
-App Store data is cached in `node_modules/.cache/` for 1 hour to avoid repeated API calls during development.
+### Coolify
+
+Enable the checkmark for _Is this a static site_ and set `/dist` as the _Publish Directory_. Then double check that the port has been changed to `80` (This should have happened automatically).
+
+## Examples
+
+Here are a few example sites using this template:
+
+- [Count Up](https://countup.shemilt.de)

@@ -12,7 +12,7 @@ const pages = await getCollection("pages");
 
 <footer class="border-t border-gray-200 dark:border-gray-800 px-6 py-8">
   <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
-    <span>Made by {developer}</span>
+    <span>Made by {settings.developerLink ? <a href={settings.developerLink} class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">{developer}</a> : developer}</span>
     {pages.length > 0 && (
       <nav class="flex gap-4">
         {pages.map((page) => (

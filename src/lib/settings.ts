@@ -8,6 +8,7 @@ export interface Settings {
   subheadline?: string;
   accentColor: string;
   developer?: string;
+  developerLink?: string;
 }
 
 let cached: Settings | null = null;
@@ -40,6 +41,7 @@ export function getSettings(): Settings {
     subheadline: map.subheadline || undefined,
     accentColor: map["accent-color"] || "#3b82f6",
     developer: map.developer || undefined,
+    developerLink: map["developer-link"] || undefined,
   };
 
   return cached;
