@@ -10,10 +10,10 @@ Built with [Astro](https://astro.build). Ships zero JavaScript. Output is pure H
 pnpm install
 ```
 
-Edit `settings.txt` with your app's ID:
+Edit `settings.yaml` with your app's ID:
 
-```
-appID = 1234567890
+```yaml
+appID: "1234567890"
 ```
 
 <!-- Adjust `contact.md` and `privacy.md` in `src/content/pages/` to fit your app. -->
@@ -27,19 +27,19 @@ pnpm run preview
 
 ## Configuration
 
-All configuration lives in `settings.txt`. Only `appID` is required. Everything else is optional and falls back to App Store data.
+All configuration lives in `settings.yaml`. Only `appID` is required. Everything else is optional and falls back to App Store data.
 
-```
+```yaml
 # Required
-appID = 1234567890
+appID: "1234567890"
 
 # Optional overrides
-title = My App
-headline = A better way to do things
-subheadline = A longer description shown below the headline.
-accent-color = #3b82f6
-developer = Your Name
-developer-link = https://example.com
+title: My App
+headline: A better way to do things
+subheadline: A longer description shown below the headline.
+accent-color: "#3b82f6"
+developer: Your Name
+developer-link: https://example.com
 ```
 
 | Key              | Required | Default                | Description                          |
