@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-accent: oklch(62.3% 0.214 259.815);
+}
+
+html {
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+article.markdown h1,
+article.markdown h2,
+article.markdown h3 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+article.markdown h1 { font-size: 2rem; }
+article.markdown h2 { font-size: 1.5rem; }
+article.markdown h3 { font-size: 1.25rem; }
+
+article.markdown p {
+  margin-bottom: 1.25em;
+  line-height: 1.7;
+}
+
+article.markdown a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+article.markdown ul,
+article.markdown ol {
+  padding-left: 1.5em;
+  margin-bottom: 1.25em;
+}
+
+article.markdown li {
+  margin-bottom: 0.25em;
+  line-height: 1.7;
+}
+
+article.markdown ul li { list-style-type: disc; }
+article.markdown ol li { list-style-type: decimal; }

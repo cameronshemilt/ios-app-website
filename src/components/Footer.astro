@@ -1,0 +1,29 @@
+---
+import { getSettings } from "../lib/settings";
+import { getAppStoreData } from "../lib/appstore";
+import { getCollection } from "astro:content";
+
+const settings = getSettings();
+const appData = await getAppStoreData(settings.appID);
+const developer = settings.developer || appData.sellerName;
+
+const pages = await getCollection("pages");
+---
+
+<footer class="border-t border-gray-200 dark:border-gray-800 px-6 py-8">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+    <span>Made by {developer}</span>
+    {pages.length > 0 && (
+      <nav class="flex gap-4">
+        {pages.map((page) => (
+          <a
+            href={`/${page.id}`}
+            class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors capitalize"
+          >
+            {page.data.title || page.id}
+          </a>
+        ))}
+      </nav>
+    )}
+  </div>
+</footer>

@@ -1,0 +1,51 @@
+---
+import { getSettings } from "../lib/settings";
+import { getAppStoreData } from "../lib/appstore";
+import AppStoreButton from "./AppStoreButton.astro";
+import Screenshot from "./Screenshot.astro";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
+const settings = getSettings();
+const appData = await getAppStoreData(settings.appID);
+
+const headline = settings.headline || appData.trackName;
+const subheadline = settings.subheadline || "";
+const trackViewUrl = appData.trackViewUrl;
+
+const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
+const iconUrl = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
+
+const hasLocalScreenshot = existsSync(resolve(process.cwd(), "public/screenshot.png"));
+const screenshotUrl = hasLocalScreenshot
+  ? "/screenshot.png"
+  : appData.screenshotUrls.length > 0
+    ? appData.screenshotUrls[0]
+    : null;
+---
+
+<section class="flex-1 flex items-center justify-center px-6 py-16 md:py-24">
+  <div class={`max-w-6xl w-full mx-auto flex flex-col ${screenshotUrl ? "md:flex-row" : ""} items-center gap-12 md:gap-16`}>
+    <div class={`flex flex-col ${screenshotUrl ? "md:w-1/2" : ""} items-center ${screenshotUrl ? "md:items-start" : ""} text-center ${screenshotUrl ? "md:text-left" : ""} gap-6`}>
+      <img
+        src={iconUrl}
+        alt="App icon"
+        class="w-20 h-20 rounded-[18px] shadow-lg"
+      />
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
+        {headline}
+      </h1>
+      {subheadline && (
+        <p class="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-lg">
+          {subheadline}
+        </p>
+      )}
+      <AppStoreButton href={trackViewUrl} />
+    </div>
+    {screenshotUrl && (
+      <div class="md:w-1/2 flex justify-center">
+        <Screenshot src={screenshotUrl} alt={`${headline} screenshot`} />
+      </div>
+    )}
+  </div>
+</section>

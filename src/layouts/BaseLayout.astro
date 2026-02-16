@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+import { getSettings } from "../lib/settings";
+import { getAppStoreData } from "../lib/appstore";
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const settings = getSettings();
+const appData = await getAppStoreData(settings.appID);
+
+const pageTitle = Astro.props.title || settings.title || appData.trackName;
+const description = Astro.props.description || settings.subheadline || "";
+const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
+const ogImage = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
+const accentColor = settings.accentColor;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="apple-itunes-app" content={`app-id=${settings.appID}`} />
+    <link rel="icon" href={ogImage} type="image/png" />
+    <style define:vars={{ accentColor }}>
+      :root {
+        --color-accent: var(--accentColor);
+      }
+    </style>
+    <script is:inline>
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </head>
+  <body class="bg-white dark:bg-black text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <slot />
+  </body>
+</html>
