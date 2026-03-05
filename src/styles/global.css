@@ -10,6 +10,10 @@ html {
   font-family: "Helvetica Neue", sans-serif;
 }
 
+article.markdown > :first-child {
+  margin-top: 0;
+}
+
 article.markdown h1,
 article.markdown h2,
 article.markdown h3 {
