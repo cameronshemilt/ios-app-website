@@ -33,8 +33,8 @@ All configuration lives in `settings.yaml`. Only `appID` is required. Everything
 | ------------------- | ---------- | --------------------- | ------------------------------------------------------------------------ |
 | `appID`             | Yes        | -                     | Your app's App Store ID                                                  |
 | `email`             | No / Maybe | hello@example.com     | Email shown on contact and privacy pages. Needed if both are left as is. |
-| `title`             | No         | App Store title       | Page title and meta tags                                                 |
-| `headline`          | No         | App Store title       | Large heading in the hero section                                        |
+| `title`             | No         | App Name              | Page title and meta tags                                                 |
+| `headline`          | No         | App Name              | Large heading in the hero section                                        |
 | `subheadline`       | No         | Hidden                | Paragraph below the headline                                             |
 | `accent-color`      | No         | Blue                  | Accent color (hex), used for buttons                                     |
 | `accent-color-dark` | No         | `accent-color`        | Accent color (hex) used in dark mode                                     |
