@@ -18,6 +18,7 @@ const description = Astro.props.description || settings.subheadline || "";
 const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
 const ogImage = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
 const accentColor = settings.accentColor;
+const accentColorDark = settings.accentColorDark;
 ---
 
 <html lang="en">
@@ -33,9 +34,14 @@ const accentColor = settings.accentColor;
     <meta name="twitter:card" content="summary" />
     <meta name="apple-itunes-app" content={`app-id=${settings.appID}`} />
     <link rel="icon" href={ogImage} type="image/png" />
-    <style define:vars={{ accentColor }}>
+    <style define:vars={{ accentColor, accentColorDark }}>
       :root {
         --color-accent: var(--accentColor);
+        --color-accent-dark: var(--accentColorDark);
+      }
+
+      .dark {
+        --color-accent: var(--color-accent-dark);
       }
     </style>
     <script is:inline>

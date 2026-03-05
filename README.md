@@ -37,6 +37,7 @@ All configuration lives in `settings.yaml`. Only `appID` is required. Everything
 | `headline`       | No         | App Store `trackName`  | Large heading in the hero section                                        |
 | `subheadline`    | No         | Hidden                 | Paragraph below the headline                                             |
 | `accent-color`   | No         | Blue                   | Accent color (hex), used for buttons                                     |
+| `accent-color-dark` | No      | `accent-color`         | Accent color (hex) used in dark mode                                     |
 | `developer`      | No         | App Store `sellerName` | Name shown in the footer                                                 |
 | `developer-link` | No         | No Link                | Link when clicking developer name                                        |
 
@@ -59,7 +60,7 @@ Drop any `.md` file into `src/content/pages/` and it becomes a page automaticall
 
 _Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app. Section for RevenueCat and TelemetryDeck exist, but are commented out.
 
-Frontmatter fields `title` and `description` are both optional. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
+Frontmatter fields `title`, `description`, and `showInFooter` are optional. `showInFooter` defaults to shown unless you set `showInFooter: false`. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
 
 ## Getting your App ID
 

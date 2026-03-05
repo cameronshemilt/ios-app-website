@@ -8,6 +8,7 @@ export interface Settings {
   headline?: string;
   subheadline?: string;
   accentColor: string;
+  accentColorDark: string;
   developer?: string;
   developerLink?: string;
   email?: string;
@@ -32,6 +33,8 @@ export function getSettings(): Settings {
     headline: map.headline || undefined,
     subheadline: map.subheadline || undefined,
     accentColor: map["accent-color"] || "#3b82f6",
+    accentColorDark:
+      map["accent-color-dark"] || map["accent-color"] || "#3b82f6",
     developer: map.developer || undefined,
     developerLink: map["developer-link"] || undefined,
     email: map.email || undefined,
