@@ -1,6 +1,7 @@
 ---
 title: Privacy Policy
 description: How we handle your data
+showInFooter: true
 ---
 
 # Privacy Policy for ${title}

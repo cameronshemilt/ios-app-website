@@ -29,17 +29,17 @@ pnpm run preview
 
 All configuration lives in `settings.yaml`. Only `appID` is required. Everything else is optional and falls back to App Store data.
 
-| Key              | Required   | Default                | Description                                                              |
-| ---------------- | ---------- | ---------------------- | ------------------------------------------------------------------------ |
-| `appID`          | Yes        | —                      | Your app's App Store ID                                                  |
-| `email`          | No / Maybe | hello@example.com      | Email shown on contact and privacy pages. Not needed if both are edited. |
-| `title`          | No         | App Store `trackName`  | Page title and meta tags                                                 |
-| `headline`       | No         | App Store `trackName`  | Large heading in the hero section                                        |
-| `subheadline`    | No         | Hidden                 | Paragraph below the headline                                             |
-| `accent-color`   | No         | Blue                   | Accent color (hex), used for buttons                                     |
-| `accent-color-dark` | No      | `accent-color`         | Accent color (hex) used in dark mode                                     |
-| `developer`      | No         | App Store `sellerName` | Name shown in the footer                                                 |
-| `developer-link` | No         | No Link                | Link when clicking developer name                                        |
+| Key                 | Required   | Default                | Description                                                             |
+| ------------------- | ---------- | ---------------------- | ----------------------------------------------------------------------- |
+| `appID`             | Yes        | —                      | Your app's App Store ID                                                 |
+| `email`             | No / Maybe | hello@example.com      | Email shown on contact and privacy pages. Not needed if both are edited |
+| `title`             | No         | App Store `trackName`  | Page title and meta tags                                                |
+| `headline`          | No         | App Store `trackName`  | Large heading in the hero section                                       |
+| `subheadline`       | No         | Hidden                 | Paragraph below the headline                                            |
+| `accent-color`      | No         | Blue                   | Accent color (hex), used for buttons                                    |
+| `accent-color-dark` | No         | `accent-color`         | Accent color (hex) used in dark mode                                    |
+| `developer`         | No         | App Store `sellerName` | Name shown in the footer                                                |
+| `developer-link`    | No         | No Link                | Link when clicking developer name                                       |
 
 Lines starting with `#` are comments.
 
@@ -60,7 +60,11 @@ Drop any `.md` file into `src/content/pages/` and it becomes a page automaticall
 
 _Contact_ and _Privacy Policy_ pages are already created and can be adjusted to your app. Section for RevenueCat and TelemetryDeck exist, but are commented out.
 
-Frontmatter fields `title`, `description`, and `showInFooter` are optional. `showInFooter` defaults to shown unless you set `showInFooter: false`. The `title` is used for the page's `<title>` tag and the footer link label. If omitted, the filename is used.
+| Frontmatter Key | Required | Default  | Description                                          |
+| --------------- | -------- | -------- | ---------------------------------------------------- |
+| `title`         | No       | Filename | Used for the page `<title>` tag and footer link text |
+| `description`   | No       | Hidden   | Used for page meta description tags                  |
+| `showInFooter`  | No       | `true`   | Set to `false` to hide this page link in the footer  |
 
 ## Getting your App ID
 

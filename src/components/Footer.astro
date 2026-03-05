@@ -7,7 +7,9 @@ const settings = getSettings();
 const appData = await getAppStoreData(settings.appID);
 const developer = settings.developer || appData.sellerName;
 
-const pages = await getCollection("pages");
+const pages = (await getCollection("pages")).filter(
+  (page) => page.data.showInFooter !== false,
+);
 ---
 
 <footer class="border-t border-gray-200 dark:border-gray-800 px-6 py-8">

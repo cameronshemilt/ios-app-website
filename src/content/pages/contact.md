@@ -1,6 +1,7 @@
 ---
 title: Contact
 description: Get in touch with us
+showInFooter: true
 ---
 
 # Contact
