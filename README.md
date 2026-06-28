@@ -29,17 +29,18 @@ pnpm run preview
 
 All configuration lives in `settings.yaml`. Only `appID` is required. Everything else is optional and falls back to App Store data.
 
-| Key                 | Required   | Default               | Description                                                              |
-| ------------------- | ---------- | --------------------- | ------------------------------------------------------------------------ |
-| `appID`             | Yes        | -                     | Your app's App Store ID                                                  |
-| `email`             | No / Maybe | hello@example.com     | Email shown on contact and privacy pages. Needed if both are left as is. |
-| `title`             | No         | App Name              | Page title and meta tags                                                 |
-| `headline`          | No         | App Name              | Large heading in the hero section                                        |
-| `subheadline`       | No         | Hidden                | Paragraph below the headline                                             |
-| `accent-color`      | No         | Blue                  | Accent color (hex), used for buttons                                     |
-| `accent-color-dark` | No         | `accent-color`        | Accent color (hex) used in dark mode                                     |
-| `developer`         | No         | App Store seller name | Name shown in the footer                                                 |
-| `developer-link`    | No         | No Link               | Link when clicking developer name                                        |
+| Key                 | Required   | Default               | Description                                                                                 |
+| ------------------- | ---------- | --------------------- | ------------------------------------------------------------------------------------------- |
+| `appID`             | Yes        | -                     | Your app's App Store ID                                                                     |
+| `email`             | No / Maybe | hello@example.com     | Email shown on contact and privacy pages. Needed if both are left as is.                    |
+| `site-url`          | No / Maybe | -                     | Full production URL, mainly used for OG image. If left empty, no og-image will be available |
+| `title`             | No         | App Name              | Page title and meta tags                                                                    |
+| `headline`          | No         | App Name              | Large heading in the hero section                                                           |
+| `subheadline`       | No         | Hidden                | Paragraph below the headline                                                                |
+| `accent-color`      | No         | Blue                  | Accent color (hex), used for buttons                                                        |
+| `accent-color-dark` | No         | `accent-color`        | Accent color (hex) used in dark mode                                                        |
+| `developer`         | No         | App Store seller name | Name shown in the footer                                                                    |
+| `developer-link`    | No         | No Link               | Link when clicking developer name                                                           |
 
 ## Local Image Overrides
 

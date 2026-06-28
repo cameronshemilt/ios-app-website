@@ -4,6 +4,9 @@ appID: "APP ID HERE"
 # Optional if you change contact.md and privacy.md
 email: hello@example.com
 
+# Mainly used for OG image. If not set, the OG image may be unavailable.
+# site-url: https://example.com
+
 # Optional Overrides
 # title: CoolApp
 # headline: Up your cool with CoolApp

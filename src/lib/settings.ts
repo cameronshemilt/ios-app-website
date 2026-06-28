@@ -12,6 +12,7 @@ export interface Settings {
   developer?: string;
   developerLink?: string;
   email?: string;
+  siteUrl?: string;
 }
 
 let cached: Settings | null = null;
@@ -101,6 +102,20 @@ function requiredAppID(map: Record<string, unknown>) {
   return appID;
 }
 
+function optionalUrl(map: Record<string, unknown>, key: string) {
+  const value = optionalString(map, key);
+  if (!value) return undefined;
+
+  try {
+    return new URL(value).toString();
+  } catch (error) {
+    throw settingsError(
+      `\`${key}\` must be a valid absolute URL, for example ${key}: "https://example.com".`,
+      error,
+    );
+  }
+}
+
 export function getSettings(): Settings {
   const path = resolve(process.cwd(), "settings.yaml");
   let mtimeMs: number;
@@ -137,6 +152,7 @@ export function getSettings(): Settings {
     developer: optionalString(map, "developer"),
     developerLink: optionalString(map, "developer-link"),
     email: optionalString(map, "email"),
+    siteUrl: optionalUrl(map, "site-url"),
   };
   cachedMtimeMs = mtimeMs;
 
