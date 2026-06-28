@@ -18,7 +18,7 @@ const description = Astro.props.description || settings.subheadline || "";
 const ogDescription = settings.subheadline || description;
 const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
 const iconImage = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
-const ogImage = Astro.site ? new URL("/og.png", Astro.site).toString() : "/og.png";
+const ogImage = new URL("/og.png", Astro.site ?? Astro.url).toString();
 const accentColor = settings.accentColor;
 const accentColorDark = settings.accentColorDark;
 ---
