@@ -15,8 +15,10 @@ const appData = await getAppStoreData(settings.appID);
 
 const pageTitle = Astro.props.title || settings.title || appData.trackName;
 const description = Astro.props.description || settings.subheadline || "";
+const ogDescription = settings.subheadline || description;
 const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
-const ogImage = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
+const iconImage = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
+const ogImage = Astro.site ? new URL("/og.png", Astro.site).toString() : "/og.png";
 const accentColor = settings.accentColor;
 const accentColorDark = settings.accentColorDark;
 ---
@@ -28,12 +30,15 @@ const accentColorDark = settings.accentColorDark;
     <title>{pageTitle}</title>
     {description && <meta name="description" content={description} />}
     <meta property="og:title" content={pageTitle} />
-    {description && <meta property="og:description" content={description} />}
+    {ogDescription && <meta property="og:description" content={ogDescription} />}
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
     <meta name="apple-itunes-app" content={`app-id=${settings.appID}`} />
-    <link rel="icon" href={ogImage} type="image/png" />
+    <link rel="icon" href={iconImage} type="image/png" />
     <style define:vars={{ accentColor, accentColorDark }}>
       :root {
         --color-accent: var(--accentColor);
