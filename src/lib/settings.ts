@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse } from "yaml";
 
@@ -15,11 +15,14 @@ export interface Settings {
 }
 
 let cached: Settings | null = null;
+let cachedMtimeMs = 0;
 
 export function getSettings(): Settings {
-  if (cached) return cached;
-
   const path = resolve(process.cwd(), "settings.yaml");
+  const mtimeMs = statSync(path).mtimeMs;
+
+  if (cached && cachedMtimeMs === mtimeMs) return cached;
+
   const raw = readFileSync(path, "utf-8");
   const map = parse(raw) as Record<string, string>;
 
@@ -39,6 +42,7 @@ export function getSettings(): Settings {
     developerLink: map["developer-link"] || undefined,
     email: map.email || undefined,
   };
+  cachedMtimeMs = mtimeMs;
 
   return cached;
 }

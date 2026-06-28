@@ -1,6 +1,7 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import MarkdownLayout from "../layouts/MarkdownLayout.astro";
+import { replaceSettingsPlaceholders } from "../lib/settings-placeholders";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -11,9 +12,9 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
-const { Content } = await render(page);
+const html = await replaceSettingsPlaceholders(page.rendered?.html ?? "");
 ---
 
 <MarkdownLayout title={page.data.title} description={page.data.description}>
-  <Content />
+  <Fragment set:html={html} />
 </MarkdownLayout>
