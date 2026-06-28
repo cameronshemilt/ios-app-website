@@ -38,22 +38,38 @@ async function getSettingsVars(): Promise<Record<string, string>> {
   );
 }
 
-function replacePlaceholders(value: string, vars: Record<string, string>) {
-  return value.replace(placeholderPattern, (match, key) => vars[key] ?? match);
+function replacePlaceholders(
+  value: string,
+  vars: Record<string, string>,
+  source: string,
+) {
+  return value.replace(placeholderPattern, (match, key) => {
+    const replacement = vars[key];
+    if (replacement === undefined) {
+      throw new Error(
+        `${source} references ${match}, but settings.yaml does not define \`${key}\` and no fallback value is available.`,
+      );
+    }
+
+    return replacement;
+  });
 }
 
-export async function replaceSettingsPlaceholders(html: string) {
+export async function replaceSettingsPlaceholders(
+  html: string,
+  source = "Markdown content",
+) {
   const vars = await getSettingsVars();
   let cursor = 0;
   let replaced = "";
 
   for (const match of html.matchAll(htmlCommentPattern)) {
     const start = match.index ?? 0;
-    replaced += replacePlaceholders(html.slice(cursor, start), vars);
+    replaced += replacePlaceholders(html.slice(cursor, start), vars, source);
     replaced += match[0];
     cursor = start + match[0].length;
   }
 
-  replaced += replacePlaceholders(html.slice(cursor), vars);
+  replaced += replacePlaceholders(html.slice(cursor), vars, source);
   return replaced;
 }

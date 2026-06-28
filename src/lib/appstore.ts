@@ -1,4 +1,10 @@
-import { mkdirSync, readFileSync, writeFileSync, existsSync, statSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { resolve } from "node:path";
 
 export interface AppStoreData {
@@ -12,6 +18,16 @@ export interface AppStoreData {
 const CACHE_DIR = resolve(process.cwd(), "node_modules/.cache/appstore");
 const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
+function stringValue(value: unknown) {
+  return typeof value === "string" ? value : "";
+}
+
+function stringArrayValue(value: unknown) {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string")
+    : [];
+}
+
 export async function getAppStoreData(appID: string): Promise<AppStoreData> {
   const cachePath = resolve(CACHE_DIR, `${appID}.json`);
 
@@ -19,35 +35,78 @@ export async function getAppStoreData(appID: string): Promise<AppStoreData> {
   if (existsSync(cachePath)) {
     const stat = statSync(cachePath);
     if (Date.now() - stat.mtimeMs < CACHE_TTL) {
-      return JSON.parse(readFileSync(cachePath, "utf-8"));
+      try {
+        return JSON.parse(readFileSync(cachePath, "utf-8"));
+      } catch (error) {
+        throw new Error(
+          `Could not read cached App Store data for appID "${appID}". Delete ${cachePath} and try again.`,
+          { cause: error },
+        );
+      }
     }
   }
 
-  const res = await fetch(
-    `https://itunes.apple.com/lookup?id=${appID}&country=us`
-  );
-  const json = await res.json();
+  let json: unknown;
 
-  if (!json.results || json.results.length === 0) {
-    throw new Error(`No app found for appID: ${appID}`);
+  try {
+    const res = await fetch(
+      `https://itunes.apple.com/lookup?id=${appID}&country=us`,
+    );
+
+    if (!res.ok) {
+      throw new Error(`Apple returned HTTP ${res.status} ${res.statusText}`);
+    }
+
+    json = await res.json();
+  } catch (error) {
+    throw new Error(
+      `Could not fetch App Store data for appID "${appID}" from settings.yaml. Check your internet connection and the appID value.`,
+      { cause: error },
+    );
   }
 
-  const app = json.results[0];
+  if (!json || typeof json !== "object" || !("results" in json)) {
+    throw new Error(
+      `Apple returned an unexpected response for appID "${appID}" from settings.yaml.`,
+    );
+  }
+
+  const lookup = json as { results?: unknown[] };
+
+  if (!lookup.results || lookup.results.length === 0) {
+    throw new Error(
+      `No App Store app found for appID "${appID}" from settings.yaml. Use the numeric Apple App ID, for example appID: "1234567890".`,
+    );
+  }
+
+  const app = lookup.results[0];
+  if (!app || typeof app !== "object") {
+    throw new Error(
+      `Apple returned an invalid app record for appID "${appID}" from settings.yaml.`,
+    );
+  }
+
+  const appRecord = app as Record<string, unknown>;
 
   // Upgrade icon to 1024px
-  const iconUrl = (app.artworkUrl512 || app.artworkUrl100 || "").replace(
+  const iconUrl = (
+    stringValue(appRecord.artworkUrl512) ||
+    stringValue(appRecord.artworkUrl100)
+  ).replace(
     /\d+x\d+bb/,
-    "1024x1024bb"
+    "1024x1024bb",
   );
 
+  const screenshotUrls = stringArrayValue(appRecord.screenshotUrls);
+  const ipadScreenshotUrls = stringArrayValue(appRecord.ipadScreenshotUrls);
+
   const data: AppStoreData = {
-    trackName: app.trackName || "App",
-    sellerName: app.sellerName || app.artistName || "",
-    trackViewUrl: app.trackViewUrl || "",
+    trackName: stringValue(appRecord.trackName) || "App",
+    sellerName:
+      stringValue(appRecord.sellerName) || stringValue(appRecord.artistName),
+    trackViewUrl: stringValue(appRecord.trackViewUrl),
     iconUrl,
-    screenshotUrls: app.screenshotUrls?.length
-      ? app.screenshotUrls
-      : app.ipadScreenshotUrls || [],
+    screenshotUrls: screenshotUrls.length ? screenshotUrls : ipadScreenshotUrls,
   };
 
   // Write cache

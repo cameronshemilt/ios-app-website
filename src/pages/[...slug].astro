@@ -12,7 +12,10 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
-const html = await replaceSettingsPlaceholders(page.rendered?.html ?? "");
+const html = await replaceSettingsPlaceholders(
+  page.rendered?.html ?? "",
+  page.filePath ?? `src/content/pages/${page.id}.md`,
+);
 ---
 
 <MarkdownLayout title={page.data.title} description={page.data.description}>
