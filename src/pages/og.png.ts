@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import opentype from "opentype.js";
 import sharp from "sharp";
 import { getAppStoreData } from "../lib/appstore";
 import { getSettings } from "../lib/settings";
@@ -16,26 +17,12 @@ const subheadlineFontSize = 34;
 const textWidth = 760;
 const titleFontPath = resolve(
   process.cwd(),
-  "node_modules/@fontsource/inter/files/inter-latin-800-normal.woff2",
+  "node_modules/@fontsource/inter/files/inter-latin-800-normal.woff",
 );
 const subheadlineFontPath = resolve(
   process.cwd(),
-  "node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2",
+  "node_modules/@fontsource/inter/files/inter-latin-500-normal.woff",
 );
-
-function escapeXml(value: string) {
-  return value.replace(
-    /[&<>"']/g,
-    (char) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&apos;",
-      })[char] ?? char,
-  );
-}
 
 async function getIconBuffer(iconUrl: string) {
   const localIconPath = resolve(process.cwd(), "public/appicon.png");
@@ -81,25 +68,53 @@ function wrapText(text: string, maxChars: number, maxLines: number) {
   return lines;
 }
 
+function loadFont(path: string) {
+  const buffer = readFileSync(path);
+  return opentype.parse(
+    buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+  );
+}
+
+function getLinePathData(font: opentype.Font, text: string, fontSize: number) {
+  let x = 0;
+  let previousGlyph: opentype.Glyph | null = null;
+  let pathData = "";
+  const scale = fontSize / font.unitsPerEm;
+
+  for (const char of text) {
+    const glyph = font.charToGlyph(char);
+
+    if (previousGlyph) {
+      x += font.getKerningValue(previousGlyph, glyph) * scale;
+    }
+
+    pathData += glyph.getPath(x, fontSize, fontSize).toPathData(2);
+    x += (glyph.advanceWidth || font.unitsPerEm) * scale;
+    previousGlyph = glyph;
+  }
+
+  return pathData;
+}
+
 function renderTextLines(
   lines: string[],
   fontSize: number,
+  lineHeight: number,
   color: string,
-  fontPath: string,
+  font: opentype.Font,
 ) {
-  const escapedLines = lines.map(escapeXml).join("\n");
+  const height = Math.ceil(fontSize + (lines.length - 1) * lineHeight + fontSize * 0.3);
+  const paths = lines
+    .map((line, index) => {
+      const pathData = getLinePathData(font, line, fontSize);
+      const translateY = index * lineHeight;
+      return `<path d="${pathData}" transform="translate(0 ${translateY})" fill="${color}"/>`;
+    })
+    .join("");
 
-  return sharp({
-    text: {
-      text: `<span foreground="${color}">${escapedLines}</span>`,
-      font: `Inter ${fontSize}`,
-      fontfile: fontPath,
-      width: textWidth,
-      rgba: true,
-    },
-  })
-    .png()
-    .toBuffer();
+  return Buffer.from(
+    `<svg width="${textWidth}" height="${height}" viewBox="0 0 ${textWidth} ${height}" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`,
+  );
 }
 
 export async function GET() {
@@ -108,6 +123,8 @@ export async function GET() {
   const title = settings.title || appData.trackName;
   const subheadline = settings.subheadline;
   const iconBuffer = await getIconBuffer(appData.iconUrl);
+  const titleFont = loadFont(titleFontPath);
+  const subheadlineFont = loadFont(subheadlineFontPath);
 
   const titleLines = wrapText(title, 24, 2);
   const subheadlineLines = subheadline ? wrapText(subheadline, 46, 2) : [];
@@ -144,8 +161,9 @@ export async function GET() {
   const titleImage = await renderTextLines(
     titleLines,
     titleFontSize,
+    titleLineHeight,
     "#111827",
-    titleFontPath,
+    titleFont,
   );
   const composites: sharp.OverlayOptions[] = [
     { input: roundedIcon, left: iconX, top: Math.round(iconY) },
@@ -157,8 +175,9 @@ export async function GET() {
     const subheadlineImage = await renderTextLines(
       subheadlineLines,
       subheadlineFontSize,
+      subheadlineLineHeight,
       "#4b5563",
-      subheadlineFontPath,
+      subheadlineFont,
     );
     composites.push({
       input: subheadlineImage,
