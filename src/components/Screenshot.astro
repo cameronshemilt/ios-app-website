@@ -1,15 +1,34 @@
 ---
+import { Image } from "astro:assets";
+
 interface Props {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
 }
 
-const { src, alt } = Astro.props;
+const { src, alt, width, height } = Astro.props;
+const hasDimensions = typeof width === "number" && typeof height === "number";
 ---
 
-<img
-  src={src}
-  alt={alt}
-  class="rounded-3xl max-h-[600px] w-auto mx-auto"
-  loading="lazy"
-/>
+{
+  hasDimensions ? (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      class="rounded-3xl max-h-[600px] w-auto mx-auto"
+      loading="lazy"
+    />
+  ) : (
+    <Image
+      src={src}
+      alt={alt}
+      inferSize
+      class="rounded-3xl max-h-[600px] w-auto mx-auto"
+      loading="lazy"
+    />
+  )
+}

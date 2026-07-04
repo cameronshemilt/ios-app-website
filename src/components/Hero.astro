@@ -5,6 +5,8 @@ import AppStoreButton from "./AppStoreButton.astro";
 import Screenshot from "./Screenshot.astro";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { Image } from "astro:assets";
+import sharp from "sharp";
 
 const settings = getSettings();
 const appData = await getAppStoreData(settings.appID);
@@ -14,23 +16,33 @@ const headline = settings.headline || appData.trackName;
 const subheadline = settings.subheadline || "";
 const trackViewUrl = appData.trackViewUrl;
 
-const hasLocalIcon = existsSync(resolve(process.cwd(), "public/appicon.png"));
+const localIconPath = resolve(process.cwd(), "public/appicon.png");
+const hasLocalIcon = existsSync(localIconPath);
 const iconUrl = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
+const iconMetadata = hasLocalIcon ? await sharp(localIconPath).metadata() : null;
+const iconWidth = iconMetadata?.width ?? 1024;
+const iconHeight = iconMetadata?.height ?? 1024;
 
-const hasLocalScreenshot = existsSync(resolve(process.cwd(), "public/screenshot.png"));
+const localScreenshotPath = resolve(process.cwd(), "public/screenshot.png");
+const hasLocalScreenshot = existsSync(localScreenshotPath);
 const screenshotUrl = hasLocalScreenshot
   ? "/screenshot.png"
   : appData.screenshotUrls.length > 0
     ? appData.screenshotUrls[0]
     : null;
+const screenshotMetadata = hasLocalScreenshot
+  ? await sharp(localScreenshotPath).metadata()
+  : null;
 ---
 
 <section class="flex-1 flex items-center justify-center px-6 py-16 md:py-24">
   <div class={`max-w-6xl w-full mx-auto flex flex-col ${screenshotUrl ? "md:flex-row" : ""} items-center gap-12 md:gap-16`}>
     <div class={`flex flex-col ${screenshotUrl ? "md:w-1/2" : ""} items-center ${screenshotUrl ? "md:items-start" : ""} text-center ${screenshotUrl ? "md:text-left" : ""} gap-6`}>
-      <img
+      <Image
         src={iconUrl}
         alt="App icon"
+        width={iconWidth}
+        height={iconHeight}
         class="w-20 h-20 rounded-[18px] shadow-lg"
       />
       <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
@@ -45,7 +57,12 @@ const screenshotUrl = hasLocalScreenshot
     </div>
     {screenshotUrl && (
       <div class="md:w-1/2 flex justify-center">
-        <Screenshot src={screenshotUrl} alt={`Screenshot of ${appName}`} />
+        <Screenshot
+          src={screenshotUrl}
+          alt={`Screenshot of ${appName}`}
+          width={screenshotMetadata?.width}
+          height={screenshotMetadata?.height}
+        />
       </div>
     )}
   </div>

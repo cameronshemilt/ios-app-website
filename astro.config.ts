@@ -6,6 +6,14 @@ const settingsPath = resolve(process.cwd(), "settings.yaml");
 
 export default defineConfig({
   output: "static",
+  image: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.mzstatic.com",
+      },
+    ],
+  },
   vite: {
     plugins: [
       tailwindcss(),
