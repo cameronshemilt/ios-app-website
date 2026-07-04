@@ -91,4 +91,5 @@ Enable the checkmark for _'Is this a static site'_ and set `/dist` as the _Publi
 
 Here are a few example sites using this template:
 
+- [Milk](https://milk.no-comment.xyz)
 - [Count Up](https://countup.shemilt.de)
