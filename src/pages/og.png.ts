@@ -41,6 +41,31 @@ async function getIconBuffer(iconUrl: string) {
   return Buffer.from(await response.arrayBuffer());
 }
 
+async function getIconComposites(iconBuffer: Buffer, isMacApp: boolean) {
+  if (isMacApp) {
+    const icon = await sharp(iconBuffer)
+      .resize(iconSize, iconSize, { fit: "contain" })
+      .png()
+      .toBuffer();
+
+    return [{ input: icon }];
+  }
+
+  const roundedIconMask = Buffer.from(
+    `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" xmlns="http://www.w3.org/2000/svg"><rect width="${iconSize}" height="${iconSize}" rx="${iconRadius}" ry="${iconRadius}" fill="#fff"/></svg>`,
+  );
+  const roundedIcon = await sharp(iconBuffer)
+    .resize(iconSize, iconSize, { fit: "cover" })
+    .composite([{ input: roundedIconMask, blend: "dest-in" }])
+    .png()
+    .toBuffer();
+  const iconBorder = Buffer.from(
+    `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="${iconSize - 1}" height="${iconSize - 1}" rx="${iconRadius}" ry="${iconRadius}" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="1"/></svg>`,
+  );
+
+  return [{ input: roundedIcon }, { input: iconBorder }];
+}
+
 function wrapText(text: string, maxChars: number, maxLines: number) {
   const words = text.trim().split(/\s+/);
   const lines: string[] = [];
@@ -123,6 +148,10 @@ export async function GET() {
   const title = settings.title || appData.trackName;
   const subheadline = settings.subheadline;
   const iconBuffer = await getIconBuffer(appData.iconUrl);
+  const iconComposites = await getIconComposites(
+    iconBuffer,
+    appData.kind === "mac-software",
+  );
   const titleFont = loadFont(titleFontPath);
   const subheadlineFont = loadFont(subheadlineFontPath);
 
@@ -147,17 +176,6 @@ export async function GET() {
       ((titleLines.length - 1) * titleLineHeight) / 2;
   const subheadlineY = titleY + titleLines.length * titleLineHeight + 12;
 
-  const roundedIconMask = Buffer.from(
-    `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" xmlns="http://www.w3.org/2000/svg"><rect width="${iconSize}" height="${iconSize}" rx="${iconRadius}" ry="${iconRadius}" fill="#fff"/></svg>`,
-  );
-  const roundedIcon = await sharp(iconBuffer)
-    .resize(iconSize, iconSize, { fit: "cover" })
-    .composite([{ input: roundedIconMask, blend: "dest-in" }])
-    .png()
-    .toBuffer();
-  const iconBorder = Buffer.from(
-    `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 ${iconSize} ${iconSize}" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="${iconSize - 1}" height="${iconSize - 1}" rx="${iconRadius}" ry="${iconRadius}" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="1"/></svg>`,
-  );
   const titleImage = await renderTextLines(
     titleLines,
     titleFontSize,
@@ -166,8 +184,11 @@ export async function GET() {
     titleFont,
   );
   const composites: sharp.OverlayOptions[] = [
-    { input: roundedIcon, left: iconX, top: Math.round(iconY) },
-    { input: iconBorder, left: iconX, top: Math.round(iconY) },
+    ...iconComposites.map((iconComposite) => ({
+      ...iconComposite,
+      left: iconX,
+      top: Math.round(iconY),
+    })),
     { input: titleImage, left: textX, top: Math.round(titleY - titleFontSize) },
   ];
 

@@ -22,6 +22,10 @@ const iconUrl = hasLocalIcon ? "/appicon.png" : appData.iconUrl;
 const iconMetadata = hasLocalIcon ? await sharp(localIconPath).metadata() : null;
 const iconWidth = iconMetadata?.width ?? 1024;
 const iconHeight = iconMetadata?.height ?? 1024;
+const iconClass =
+  appData.kind === "mac-software"
+    ? "w-28 h-28 object-contain"
+    : "w-20 h-20 rounded-[18px] shadow-lg";
 
 const localScreenshotPath = resolve(process.cwd(), "public/screenshot.png");
 const hasLocalScreenshot = existsSync(localScreenshotPath);
@@ -43,7 +47,7 @@ const screenshotMetadata = hasLocalScreenshot
         alt="App icon"
         width={iconWidth}
         height={iconHeight}
-        class="w-20 h-20 rounded-[18px] shadow-lg"
+        class={iconClass}
       />
       <h1 class="text-4xl md:text-5xl font-bold tracking-tight">
         {headline}

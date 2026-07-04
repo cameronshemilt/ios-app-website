@@ -8,6 +8,7 @@ import {
 import { resolve } from "node:path";
 
 export interface AppStoreData {
+  kind: string;
   trackName: string;
   sellerName: string;
   trackViewUrl: string;
@@ -49,6 +50,7 @@ function hasCurrentCacheShape(value: unknown): value is AppStoreData {
     !!value &&
     typeof value === "object" &&
     typeof (value as AppStoreData).description === "string" &&
+    typeof (value as AppStoreData).kind === "string" &&
     typeof (value as AppStoreData).fileSizeBytes === "string" &&
     typeof (value as AppStoreData).averageUserRating === "number"
   );
@@ -130,6 +132,7 @@ export async function getAppStoreData(appID: string): Promise<AppStoreData> {
   const ipadScreenshotUrls = stringArrayValue(appRecord.ipadScreenshotUrls);
 
   const data: AppStoreData = {
+    kind: stringValue(appRecord.kind),
     trackName: stringValue(appRecord.trackName) || "App",
     sellerName:
       stringValue(appRecord.sellerName) || stringValue(appRecord.artistName),
