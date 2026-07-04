@@ -65,6 +65,14 @@ _Contact_ and _Privacy Policy_ pages are already created and can be adjusted to 
 | `description`   | No       | Hidden   | Used for page meta description tags                  |
 | `showInFooter`  | No       | True     | Decides if link to page is shown in footer           |
 
+## Additional Sections
+
+There are some additional compinents included in `index.astro` that you can use to expand the homepage. They are commented out by default.
+
+- `ScreenshotGallery`: A horizontal scrolling section with all of your apps screenshots. This is not affected by adding a screenshot.png to the public folder.
+- `Description`: Your app's description, fetched from the App Store.
+- `AdditionalInformation`: Like the information section on the App Store, this section shows the app's version, size, release date, etc.
+
 ## Getting your App ID
 
 To find your app ID from [App Store Marketing Tools](https://tools.applemediaservices.com/app-store), type the name of your app in the Search field, and select the appropriate country or region and media type. In the results, select your app. In the detail view for your app, find the Content Link. Your app ID is the number between id and ?.

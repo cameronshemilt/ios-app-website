@@ -12,6 +12,18 @@ export interface AppStoreData {
   sellerName: string;
   trackViewUrl: string;
   iconUrl: string;
+  description: string;
+  fileSizeBytes: string;
+  minimumOsVersion: string;
+  contentAdvisoryRating: string;
+  formattedPrice: string;
+  primaryGenreName: string;
+  genres: string[];
+  languageCodesISO2A: string[];
+  version: string;
+  currentVersionReleaseDate: string;
+  averageUserRating: number;
+  userRatingCount: number;
   screenshotUrls: string[];
 }
 
@@ -28,6 +40,20 @@ function stringArrayValue(value: unknown) {
     : [];
 }
 
+function numberValue(value: unknown) {
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function hasCurrentCacheShape(value: unknown): value is AppStoreData {
+  return (
+    !!value &&
+    typeof value === "object" &&
+    typeof (value as AppStoreData).description === "string" &&
+    typeof (value as AppStoreData).fileSizeBytes === "string" &&
+    typeof (value as AppStoreData).averageUserRating === "number"
+  );
+}
+
 export async function getAppStoreData(appID: string): Promise<AppStoreData> {
   const cachePath = resolve(CACHE_DIR, `${appID}.json`);
 
@@ -36,7 +62,10 @@ export async function getAppStoreData(appID: string): Promise<AppStoreData> {
     const stat = statSync(cachePath);
     if (Date.now() - stat.mtimeMs < CACHE_TTL) {
       try {
-        return JSON.parse(readFileSync(cachePath, "utf-8"));
+        const cachedData: unknown = JSON.parse(readFileSync(cachePath, "utf-8"));
+        if (hasCurrentCacheShape(cachedData)) {
+          return cachedData;
+        }
       } catch (error) {
         throw new Error(
           `Could not read cached App Store data for appID "${appID}". Delete ${cachePath} and try again.`,
@@ -106,6 +135,20 @@ export async function getAppStoreData(appID: string): Promise<AppStoreData> {
       stringValue(appRecord.sellerName) || stringValue(appRecord.artistName),
     trackViewUrl: stringValue(appRecord.trackViewUrl),
     iconUrl,
+    description: stringValue(appRecord.description),
+    fileSizeBytes: stringValue(appRecord.fileSizeBytes),
+    minimumOsVersion: stringValue(appRecord.minimumOsVersion),
+    contentAdvisoryRating:
+      stringValue(appRecord.contentAdvisoryRating) ||
+      stringValue(appRecord.trackContentRating),
+    formattedPrice: stringValue(appRecord.formattedPrice),
+    primaryGenreName: stringValue(appRecord.primaryGenreName),
+    genres: stringArrayValue(appRecord.genres),
+    languageCodesISO2A: stringArrayValue(appRecord.languageCodesISO2A),
+    version: stringValue(appRecord.version),
+    currentVersionReleaseDate: stringValue(appRecord.currentVersionReleaseDate),
+    averageUserRating: numberValue(appRecord.averageUserRating),
+    userRatingCount: numberValue(appRecord.userRatingCount),
     screenshotUrls: screenshotUrls.length ? screenshotUrls : ipadScreenshotUrls,
   };
 
