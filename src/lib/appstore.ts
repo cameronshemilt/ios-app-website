@@ -79,6 +79,7 @@ function screenshotUrlsFromAppStorePage(html: string) {
     if (!SCREENSHOT_TEMPLATE_PATTERN.test(template)) continue;
 
     const width = Number.parseInt(rawWidth, 10);
+    const height = Number.parseInt(rawHeight, 10);
     if (!Number.isFinite(width) || !Number.isFinite(height)) continue;
 
     screenshots.set(template, appStoreArtworkUrl(template, width, height));
