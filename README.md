@@ -83,6 +83,10 @@ Alternatively, select your app in App Store Connect. Under General, select App I
 
 Since this template uses Astro, a static site will be generated in the `/dist` directory.
 
+### Vercel
+
+Just make sure that the Astro preset is selected. Everything should work automatically.
+
 ### Coolify
 
 Enable the checkmark for _'Is this a static site'_ and set `/dist` as the _Publish Directory_. Then double check that the port has been changed to `80` (This should have happened automatically).
