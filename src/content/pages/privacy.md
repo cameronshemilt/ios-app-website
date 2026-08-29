@@ -14,7 +14,7 @@ We do not collect personal information such as your name, email address, phone n
 
 All of your app settings are stored on your device — they are not stored on our servers. If you are on an iOS device, this information may also be stored in iCloud so that the data syncs to your other devices.
 
-<!-- For analytics, ${title} uses [TelemetryDeck](https://telemetrydeck.com/pages/privacy-policy.html), a privacy-first, lightweight analytics solution that prides itself on being anonymous. The info collected here helps me make development decisions. For instance knowing what percentage of people use Markdown, view Achievements, or generally if a feature is being used a lot. -->
+<!-- For analytics, ${title} uses [TelemetryDeck](https://telemetrydeck.com/pages/privacy-policy.html), a privacy-first, lightweight analytics solution that prides itself on being anonymous. The info collected here helps me make development decisions. For instance knowing what percentage of users use a feature. -->
 
 <!-- ## Payment Data
 
